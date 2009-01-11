@@ -252,3 +252,26 @@ Finally, if not adapter can be found, we fall back on getattr() on the object.
     >>> catalog.catalog_object(page, 'p3', idxs=['description', 'text'])
     description = The page b
     text = The page body text here
+    
+Interfaces provided by the wrapper
+==================================
+
+The indexable object wrapper has one particular feature: instances of the
+wrapper will provide the same interfaces as instances of the wrapped object.
+For example:
+
+    >>> wrapper = IndexableObjectWrapper(page, portal)
+    >>> IIndexableObjectWrapper.providedBy(wrapper)
+    True
+    >>> IPage.providedBy(wrapper)
+    True
+    >>> INewsItem.providedBy(wrapper)
+    False
+
+    >>> wrapper = IndexableObjectWrapper(news, portal)
+    >>> IIndexableObjectWrapper.providedBy(wrapper)
+    True
+    >>> IPage.providedBy(wrapper)
+    False
+    >>> INewsItem.providedBy(wrapper)
+    True

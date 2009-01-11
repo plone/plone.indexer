@@ -1,8 +1,23 @@
 from zope.interface import implements
+from zope.interface import providedBy
+from zope.interface.declarations import getObjectSpecification
+from zope.interface.declarations import ObjectSpecification
+from zope.interface.declarations import ObjectSpecificationDescriptor
+
 from zope.component import queryAdapter
 
 from plone.indexer.interfaces import IIndexableObjectWrapper
 from plone.indexer.interfaces import IIndexer
+
+class WrapperSpecification(ObjectSpecificationDescriptor):
+
+    def __get__(self, inst, cls=None):
+        if inst is None:
+            return getObjectSpecification(cls)
+        else:
+            provided = providedBy(inst._IndexableObjectWrapper__object)
+            cls = type(inst)
+            return ObjectSpecification(provided, cls)
 
 class IndexableObjectWrapper(object):
     """A simple wrapper for indexable objects that will delegate to IIndexer
@@ -10,6 +25,7 @@ class IndexableObjectWrapper(object):
     """
     
     implements(IIndexableObjectWrapper)
+    __providedBy__ = WrapperSpecification()
     
     def __init__(self, object, portal):
         self.__object = object
