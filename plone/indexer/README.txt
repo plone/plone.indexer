@@ -37,12 +37,12 @@ For example, let's say we have two types, page and news item:
     ...         self.story = story
     ...         self.audience = audience
 
-Let's that our catalog had an index 'description', which for a page should
-contain the first 10 characters from the body text, and for a news item should
-contain the contents of the 'summary' field. Furthermore, there is an index
-'audience' that should contain the value of the corresponding field for news
-items, but in all uppercase, unless the 'noupper' keyword argument is passed
-to catalog_object(). It should do nothing for pages.
+Now, pretned that our catalog had an index 'description', which for a page
+should contain the first 10 characters from the body text, and for a news
+item should contain the contents of the 'summary' field. Furthermore, there
+is an index 'audience' that should contain the value of the corresponding
+field for news items, but in all uppercase, unless the 'noupper' keyword
+argument is passed to catalog_object(). It should do nothing for pages.
 
 We could write indexers for all of these like this
 
