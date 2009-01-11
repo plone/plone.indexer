@@ -37,7 +37,7 @@ For example, let's say we have two types, page and news item:
     ...         self.story = story
     ...         self.audience = audience
 
-Now, pretned that our catalog had an index 'description', which for a page
+Now, pretend that our catalog had an index 'description', which for a page
 should contain the first 10 characters from the body text, and for a news
 item should contain the contents of the 'summary' field. Furthermore, there
 is an index 'audience' that should contain the value of the corresponding
@@ -67,7 +67,7 @@ tools, then use kw['portal'] or simply declare that your indexer takes a
 'portal' argument.
 
 These need to be registered as named adapters, where the name corresponds to
-the index name. In ZCML, that may be:
+the index name. In ZCML, that may be::
 
     <adapter name="description" factory=".indexers.page_description" />
     <adapter name="description" factory=".indexers.newsitem_description" />
@@ -84,6 +84,59 @@ For the purposes of the ensuing tests, we'll register these directly.
     >>> provideAdapter(page_description, name='description')
     >>> provideAdapter(newsitem_description, name='description')
     >>> provideAdapter(newsitem_audience, name='audience')
+
+Testing your indexers (or calling them directly)
+------------------------------------------------
+
+If you are writing tests for your indexers (as you should!), then you should
+be aware of the following.
+
+When the @indexer decorator returns, it turns your function into an instance
+of type DelegatingIndexerFactory. This is an adapter factory that can create
+a DelegatingIndexer, which in turn will call your function when asked to
+perform indexing operations.
+   
+This means that you can't just call your function to test the indexer.
+Instead, you need to instantiate the adapter and then call the delegating
+indexer with the portal root as the first argument. For example:
+ 
+    >>> test_page = Page(text=u"My page with some text")
+    >>> page_description(test_page)(portal=None)
+    u'My page wi'
+ 
+You can pass other keyword arguments to the indexer as well, and they'll be
+passed through to your function.
+
+Other means of registering indexers
+-----------------------------------
+
+At the end of the day, an indexer is just a named adapter from the indexable
+object (e.g. INewsItem or IPage above) to IIndexer, where the name is the name
+of the indexed attribute in the catalog. Thus, you could register your
+indexers as more conventional adapters:
+
+    >>> from plone.indexer.interfaces import IIndexer
+    >>> from zope.interface import implements
+    >>> from zope.component import adapts
+    >>> class LengthIndexer(object):
+    ...     """Index the length of the body text
+    ...     """
+    ...     implements(IIndexer)
+    ...     adapts(IPage)
+    ...     
+    ...     def __init__(self, context):
+    ...         self.context = context
+    ...         
+    ...     def __call__(self, portal, **kwargs):
+    ...         return len(self.context.text)
+
+You'd register this with ZCML like so::
+
+    <adapter factory=".indexers.LengthIndexer" name="length" />
+    
+Or in a test:
+
+    >>> provideAdapter(LengthIndexer, name="length")
 
 If you're only curious about how to write indexers, you can probably stop
 here. If you want to know more about how they work and how they are wired into
@@ -173,10 +226,11 @@ Finally, let's create some objects to index.
 First of all, let's demonstrate that our indexers work and apply only to
 the types for which they are registered.
 
-    >>> catalog.catalog_object(page, 'p1', idxs=['description', 'audience'])
+    >>> catalog.catalog_object(page, 'p1', idxs=['description', 'audience', 'length'])
     description = The page b
+    length = 23
 
-    >>> catalog.catalog_object(news, 'n1', idxs=['description', 'audience'])
+    >>> catalog.catalog_object(news, 'n1', idxs=['description', 'audience', 'length'])
     description = News summary
     audience = AUDIENCE
 
