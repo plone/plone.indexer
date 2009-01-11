@@ -10,6 +10,9 @@ from plone.indexer.interfaces import IIndexableObjectWrapper
 from plone.indexer.interfaces import IIndexer
 
 class WrapperSpecification(ObjectSpecificationDescriptor):
+    """A __providedBy__ decorator that returns the interfaces provided by
+    the wrapped object when asked.
+    """
 
     def __get__(self, inst, cls=None):
         if inst is None:
