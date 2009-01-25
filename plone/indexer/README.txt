@@ -190,7 +190,10 @@ The important things here are:
       register one in a moment) and allow some coarse-grained overrides.
       
     - The IndexableObjectWrapper has to be updated with workflow variables
-      (or other variables) and keyword arguments as passed to catalog_object()
+      (or other variables) and keyword arguments as passed to
+      catalog_object(). Note that the real ZCatalog can't use named IIndexable
+      adapters for the workflow variables here as the workflow tool normally
+      determines what variables to provide at runtime.
       
     - Cataloging involves looking up attributes on the indexable object 
       wrapper matching the names of indexes (in the real ZCatalog, this is
