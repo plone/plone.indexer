@@ -1,14 +1,14 @@
-from zope.interface import implements
-from zope.interface import providedBy
+from zope.interface import implements, providedBy, Interface
 from zope.interface.declarations import getObjectSpecification
 from zope.interface.declarations import ObjectSpecification
 from zope.interface.declarations import ObjectSpecificationDescriptor
 
-from zope.component import queryMultiAdapter
+from zope.component import adapts, queryMultiAdapter
 
 from plone.indexer.interfaces import IIndexableObjectWrapper, IIndexableObject
 from plone.indexer.interfaces import IIndexer
 
+from Products.ZCatalog import IZCatalog
 from Products.CMFCore.utils import getToolByName
 
 class WrapperSpecification(ObjectSpecificationDescriptor):
@@ -30,6 +30,8 @@ class IndexableObjectWrapper(object):
     """
     
     implements(IIndexableObject, IIndexableObjectWrapper)
+    adapts(Interface, IZCatalog)
+    
     __providedBy__ = WrapperSpecification()
     
     def __init__(self, object, catalog):

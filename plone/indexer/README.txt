@@ -156,10 +156,12 @@ In CMF 2.2, there is an IIndexableObject marker interface defined in
 Products.CMFCore.interfaces. We have a compatibility alias in this package
 for use with CMF 2.1.
 
+    >>> from Products.ZCatalog.interfaces import IZCatalog
     >>> from plone.indexer.interfaces import IIndexableObject
     >>> from zope.component import queryMultiAdapter
 
     >>> class FauxCatalog(object):
+    ...     implements(IZCatalog)
     ...
     ...     def catalog_object(self, object, uid, idxs=[]):
     ...         """Pretend to index 'object' under the key 'uid'. We'll
