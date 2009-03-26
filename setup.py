@@ -25,9 +25,10 @@ setup(name='plone.indexer',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
+          'zope.interface',
+          'zope.component',
+          'Products.CMFCore',
       ],
       entry_points="""
-      # -*- Entry points: -*-
       """,
       )

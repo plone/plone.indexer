@@ -41,30 +41,23 @@ Now, pretend that our catalog had an index 'description', which for a page
 should contain the first 10 characters from the body text, and for a news
 item should contain the contents of the 'summary' field. Furthermore, there
 is an index 'audience' that should contain the value of the corresponding
-field for news items, but in all uppercase, unless the 'noupper' keyword
-argument is passed to catalog_object(). It should do nothing for pages.
+field for news items, in all uppercase. It should do nothing for pages.
 
 We could write indexers for all of these like this
 
-    >>> from plone.indexer.decorator import indexer
+    >>> from plone.indexer import indexer
     
     >>> @indexer(IPage)
-    ... def page_description(object, **kw):
+    ... def page_description(object):
     ...     return object.text[:10]
 
     >>> @indexer(INewsItem)
-    ... def newsitem_description(object, **kw):
+    ... def newsitem_description(object):
     ...     return object.summary
 
     >>> @indexer(INewsItem)
-    ... def newsitem_audience(object, **kw):
-    ...     if 'noupper' in kw:
-    ...         return object.audience
+    ... def newsitem_audience(object):
     ...     return object.audience.upper()
-
-Hint: If you require access to the portal root for any reason, e.g. to acquire
-tools, then use kw['portal'] or simply declare that your indexer takes a
-'portal' argument.
 
 These need to be registered as named adapters, where the name corresponds to
 the index name. In ZCML, that may be::
@@ -89,7 +82,7 @@ Testing your indexers (or calling them directly)
 ------------------------------------------------
 
 If you are writing tests for your indexers (as you should!), then you should
-be aware of the following.
+be aware of the following:
 
 When the @indexer decorator returns, it turns your function into an instance
 of type DelegatingIndexerFactory. This is an adapter factory that can create
@@ -101,34 +94,42 @@ Instead, you need to instantiate the adapter and then call the delegating
 indexer with the portal root as the first argument. For example:
  
     >>> test_page = Page(text=u"My page with some text")
-    >>> page_description(test_page)(portal=None)
+    >>> page_description(test_page)()
     u'My page wi'
- 
-You can pass other keyword arguments to the indexer as well, and they'll be
-passed through to your function.
+
+This will suffice in most cases. Note that there is actually a second
+parameter, catalog, which defaults to None. If you need to write an indexer
+that acts on catalog, you'll need to register a conventional adapter, as
+described in the next section.
 
 Other means of registering indexers
 -----------------------------------
 
-At the end of the day, an indexer is just a named adapter from the indexable
-object (e.g. INewsItem or IPage above) to IIndexer, where the name is the name
+At the end of the day, an indexer is just a named multi-adapter from the
+indexable object (e.g. INewsItem or IPage above) and the catalog (usually
+portal_catalog in a CMF application) to IIndexer, where the name is the name
 of the indexed attribute in the catalog. Thus, you could register your
 indexers as more conventional adapters:
 
     >>> from plone.indexer.interfaces import IIndexer
-    >>> from zope.interface import implements
+    >>> from zope.interface import implements, Interface
     >>> from zope.component import adapts
     >>> class LengthIndexer(object):
     ...     """Index the length of the body text
     ...     """
     ...     implements(IIndexer)
-    ...     adapts(IPage)
+    ...     adapts(IPage, Interface)
     ...     
-    ...     def __init__(self, context):
+    ...     def __init__(self, context, catalog):
     ...         self.context = context
+    ...         self.catalog = catalog
     ...         
-    ...     def __call__(self, portal, **kwargs):
+    ...     def __call__(self):
     ...         return len(self.context.text)
+
+We normally just use 'Interface' (or *, if registered in ZCML) as the catalog
+interface. However, if you want different indexers for different types of
+catalogs, there is an example later in this test.
 
 You'd register this with ZCML like so::
 
@@ -151,32 +152,29 @@ ZCatalog interface, only catalog_object(), and we'll stub out a few things.
 This really is for illustration purposes only, to show the intended usage
 pattern.
 
-    >>> from plone.indexer.interfaces import IIndexableObjectWrapper
-    >>> from zope.component import getMultiAdapter
+In CMF 2.2, there is an IIndexableObject marker interface defined in 
+Products.CMFCore.interfaces. We have a compatibility alias in this package
+for use with CMF 2.1.
+
+    >>> from plone.indexer.interfaces import IIndexableObject
+    >>> from zope.component import queryMultiAdapter
 
     >>> class FauxCatalog(object):
     ...
-    ...     workflow_vars = {} # for testing only
-    ...     
-    ...     def __init__(self, portal):
-    ...         self.portal = portal
-    ...     
-    ...     def catalog_object(self, object, uid, idxs=[], **kwargs):
-    ...         """Pretend to index 'object' under the key 'uid'. We'll look
-    ...         in self.workflow_vars[uid] for a dict of workflow variables
-    ...         that will be passed to the indexable object wrapper. We'll
+    ...     def catalog_object(self, object, uid, idxs=[]):
+    ...         """Pretend to index 'object' under the key 'uid'. We'll
     ...         print the results of the indexing operation to the screen .
     ...         """
-    ...         vars = self.workflow_vars.get(uid, {})
     ...         
-    ...         # Look up the indexable object wrapper and initialise it
-    ...         wrapper = getMultiAdapter((object, self.portal), IIndexableObjectWrapper)
-    ...         wrapper.update(vars, **kwargs)
+    ...         if not IIndexableObject.providedBy(object):
+    ...             wrapper = queryMultiAdapter((object, self,), IIndexableObject)
+    ...             if wrapper is not None:
+    ...                 object = wrapper
     ...         
     ...         # Perform the actual indexing of attributes in the idxs list
     ...         for idx in idxs:
     ...             try:
-    ...                 indexed_value = getattr(wrapper, idx)
+    ...                 indexed_value = getattr(object, idx)
     ...                 if callable(indexed_value):
     ...                     indexed_value = indexed_value()
     ...                 print idx, "=", indexed_value
@@ -185,15 +183,9 @@ pattern.
 
 The important things here are:
 
-    - We look up an IndexableObjectWrapper adapter on (object, portal). This
-      is just a way to get hold of an implementation of this interface (we'll
-      register one in a moment) and allow some coarse-grained overrides.
-      
-    - The IndexableObjectWrapper has to be updated with workflow variables
-      (or other variables) and keyword arguments as passed to
-      catalog_object(). Note that the real ZCatalog can't use named IIndexable
-      adapters for the workflow variables here as the workflow tool normally
-      determines what variables to provide at runtime.
+    - We attempt to obtain an IIndexableObject for the object to be indexed.
+      This is just a way to get hold of an implementation of this interface
+      (we'll register one in a moment) and allow some coarse-grained overrides.
       
     - Cataloging involves looking up attributes on the indexable object 
       wrapper matching the names of indexes (in the real ZCatalog, this is
@@ -201,25 +193,20 @@ The important things here are:
       callable, they should be called. This is just mimicking what ZCatalog's
       implementation does.
       
-This package comes with an implementation of IIndexableObjectWrapper that
+This package comes with an implementation of an IIndexableObject adapter that
 knows how to delegate to an IIndexer. Let's now register that as the default
-IIndexableObjectWrapper adapter so that the code above will find it.
+IIndexableObject wrapper adapter so that the code above will find it.
 
     >>> from plone.indexer.wrapper import IndexableObjectWrapper
-    >>> provideAdapter(IndexableObjectWrapper, (Interface, Interface))
+    >>> from plone.indexer.interfaces import IIndexableObject
+    >>> provideAdapter(factory=IndexableObjectWrapper, adapts=(Interface, Interface,), provides=IIndexableObject)
 
 Seeing it in action
 ===================
 
-Now for the testing. First, we need a faux portal:
+Now for the testing. First, we need a faux catalog:
 
-    >>> class Portal(object):
-    ...     implements(Interface)
-    >>> portal = Portal()
-
-Then we need a catalog to test with:
-
-    >>> catalog = FauxCatalog(portal)
+    >>> catalog = FauxCatalog()
 
 Finally, let's create some objects to index.
 
@@ -237,25 +224,64 @@ the types for which they are registered.
     description = News summary
     audience = AUDIENCE
 
-Keyword arguments are also passed through to the indexers.
+Our custom indexable object wrapper is capable of looking up workflow
+variables if the portal_workflow tool is available. For testing purposes,
+we'll create a fake minimal workflow tool and stash it onto the fake catalog
+so that it can be found by getToolByName. In real life, it would of course be
+acquirable as normal.
 
-    >>> catalog.catalog_object(news, 'n2', idxs=['audience'], noupper=True)
-    audience = Audience
+    >>> class FauxWorkflowTool(object):
+    ...     def getCatalogVariablesFor(self, object):
+    ...         return dict(review_state='published', audience='Somebody')
+    >>> catalog.portal_workflow = FauxWorkflowTool()
 
-The indexable object wrapper will return the variables provided to update()
-if the name matches, in preference of using indexers.
+If we now index 'review_state', it will be obtained from the workflow
+variables. However, a custom indexer still overrides workflow variables.
 
-    >>> catalog.workflow_vars['p2'] = dict(state='Published', description='Overridden!')
-    >>> catalog.catalog_object(page, 'p2', idxs=['state', 'description'])
-    state = Published
-    description = Overridden!
+    >>> catalog.catalog_object(news, 'n1', idxs=['description', 'audience', 'review_state'])
+    description = News summary
+    audience = AUDIENCE
+    review_state = published
 
 Finally, if not adapter can be found, we fall back on getattr() on the object.
 
     >>> catalog.catalog_object(page, 'p3', idxs=['description', 'text'])
     description = The page b
     text = The page body text here
-    
+
+Customising indexers based on the catalog type
+==============================================
+
+It is possible to provide a custom indexer for a different type of catalog.
+To test that, let's create a secondary catalog and mark it with a marker
+interface.
+
+    >>> class IAlternateCatalog(Interface):
+    ...     pass
+    >>> from zope.interface import alsoProvides
+    >>> catalog2 = FauxCatalog()
+    >>> alsoProvides(catalog2, IAlternateCatalog)
+
+Let's say that we did not want the news item audience uppercased here. We
+could provide a custom indexer for just this catalog:
+
+    >>> @indexer(INewsItem, IAlternateCatalog)
+    ... def alternate_newsitem_audience(object):
+    ...     return object.audience.lower()
+    >>> provideAdapter(alternate_newsitem_audience, name='audience')
+
+This does not affect the first catalog:
+
+    >>> catalog.catalog_object(news, 'n1', idxs=['description', 'audience', 'length'])
+    description = News summary
+    audience = AUDIENCE
+
+However, the second catalog gets the audience in lowercase.
+
+    >>> catalog2.catalog_object(news, 'n1', idxs=['description', 'audience', 'length'])
+    description = News summary
+    audience = audience
+
 Interfaces provided by the wrapper
 ==================================
 
@@ -263,15 +289,18 @@ The indexable object wrapper has one particular feature: instances of the
 wrapper will provide the same interfaces as instances of the wrapped object.
 For example:
 
-    >>> wrapper = IndexableObjectWrapper(page, portal)
+    >>> from plone.indexer.interfaces import IIndexableObjectWrapper, IIndexableObject
+    >>> wrapper = IndexableObjectWrapper(page, catalog)
     >>> IIndexableObjectWrapper.providedBy(wrapper)
+    True
+    >>> IIndexableObject.providedBy(wrapper)
     True
     >>> IPage.providedBy(wrapper)
     True
     >>> INewsItem.providedBy(wrapper)
     False
 
-    >>> wrapper = IndexableObjectWrapper(news, portal)
+    >>> wrapper = IndexableObjectWrapper(news, catalog)
     >>> IIndexableObjectWrapper.providedBy(wrapper)
     True
     >>> IPage.providedBy(wrapper)

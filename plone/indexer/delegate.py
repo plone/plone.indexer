@@ -7,22 +7,22 @@ class DelegatingIndexer(object):
     """
     implements(IIndexer)
     
-    def __init__(self, context, callable):
+    def __init__(self, context, catalog, callable):
         self.context = context
+        self.catalog = catalog
         self.callable = callable
         
-    def __call__(self, portal, **kwargs):
-        kwargs = kwargs.copy()
-        kwargs.setdefault('portal', portal)
-        return self.callable(self.context, **kwargs)
+    def __call__(self):
+        return self.callable(self.context)
 
 class DelegatingIndexerFactory(object):
-    """A factory for a DelegatingIndexer
+    """An adapter factory for an IIndexer that works by calling a
+    DelegatingIndexer.
     """
     
     def __init__(self, callable):
         self.callable = callable
         self.__implemented__ = Implements(implementedBy(DelegatingIndexer))
         
-    def __call__(self, object):
-        return DelegatingIndexer(object, self.callable)
+    def __call__(self, object, catalog=None):
+        return DelegatingIndexer(object, catalog, self.callable)

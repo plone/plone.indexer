@@ -4,10 +4,12 @@ from zope.interface.declarations import getObjectSpecification
 from zope.interface.declarations import ObjectSpecification
 from zope.interface.declarations import ObjectSpecificationDescriptor
 
-from zope.component import queryAdapter
+from zope.component import queryMultiAdapter
 
-from plone.indexer.interfaces import IIndexableObjectWrapper
+from plone.indexer.interfaces import IIndexableObjectWrapper, IIndexableObject
 from plone.indexer.interfaces import IIndexer
+
+from Products.CMFCore.utils import getToolByName
 
 class WrapperSpecification(ObjectSpecificationDescriptor):
     """A __providedBy__ decorator that returns the interfaces provided by
@@ -27,18 +29,17 @@ class IndexableObjectWrapper(object):
     adapters as appropriate.
     """
     
-    implements(IIndexableObjectWrapper)
+    implements(IIndexableObject, IIndexableObjectWrapper)
     __providedBy__ = WrapperSpecification()
     
-    def __init__(self, object, portal):
+    def __init__(self, object, catalog):
         self.__object = object
-        self.__portal = portal
-        self.__kwargs = {}
+        self.__catalog = catalog
         self.__vars = {}
-
-    def update(self, vars, **kwargs):
-        self.__vars = vars
-        self.__kwargs = kwargs
+        
+        portal_workflow = getToolByName(catalog, 'portal_workflow', None)
+        if portal_workflow is not None:
+            self.__vars = portal_workflow.getCatalogVariablesFor(object)
 
     def __str__(self):
         try:
@@ -48,14 +49,15 @@ class IndexableObjectWrapper(object):
 
     def __getattr__(self, name):
         
-        # First, try workflow variables
+        # First, try to look up an indexer adapter
+        indexer = queryMultiAdapter((self.__object, self.__catalog,), IIndexer, name=name)
+        if indexer is not None:
+            return indexer()
+
+        # Then, try workflow variables
         if name in self.__vars:
             return self.__vars[name]
-            
-        # Then try to look up IIndexer adapters
-        indexer = queryAdapter(self.__object, IIndexer, name=name)
-        if indexer is not None:
-            return indexer(portal=self.__portal, **self.__kwargs)
-        
-        # Finally see if the object provides the attribute directly
+                    
+        # Finally see if the object provides the attribute directly. This
+        # is allowed to raise AttributeError.
         return getattr(self.__object, name)
