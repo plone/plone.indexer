@@ -112,13 +112,15 @@ of the indexed attribute in the catalog. Thus, you could register your
 indexers as more conventional adapters:
 
     >>> from plone.indexer.interfaces import IIndexer
-    >>> from zope.interface import implements, Interface
+    >>> from Products.ZCatalog.interfaces import IZCatalog
+
+    >>> from zope.interface import implements
     >>> from zope.component import adapts
     >>> class LengthIndexer(object):
     ...     """Index the length of the body text
     ...     """
     ...     implements(IIndexer)
-    ...     adapts(IPage, Interface)
+    ...     adapts(IPage, IZCatalog)
     ...     
     ...     def __init__(self, context, catalog):
     ...         self.context = context
@@ -127,8 +129,8 @@ indexers as more conventional adapters:
     ...     def __call__(self):
     ...         return len(self.context.text)
 
-We normally just use 'Interface' (or *, if registered in ZCML) as the catalog
-interface. However, if you want different indexers for different types of
+We normally just use IZCatalog for the catalog adaptation, to apply to any
+catalog. However, if you want different indexers for different types of
 catalogs, there is an example later in this test.
 
 You'd register this with ZCML like so::
@@ -201,7 +203,7 @@ IIndexableObject wrapper adapter so that the code above will find it.
 
     >>> from plone.indexer.wrapper import IndexableObjectWrapper
     >>> from plone.indexer.interfaces import IIndexableObject
-    >>> provideAdapter(factory=IndexableObjectWrapper, adapts=(Interface, Interface,), provides=IIndexableObject)
+    >>> provideAdapter(factory=IndexableObjectWrapper, adapts=(Interface, IZCatalog,), provides=IIndexableObject)
 
 Seeing it in action
 ===================
@@ -258,6 +260,7 @@ It is possible to provide a custom indexer for a different type of catalog.
 To test that, let's create a secondary catalog and mark it with a marker
 interface.
 
+    >>> from zope.interface import Interface
     >>> class IAlternateCatalog(Interface):
     ...     pass
     >>> from zope.interface import alsoProvides

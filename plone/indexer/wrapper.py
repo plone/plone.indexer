@@ -50,7 +50,6 @@ class IndexableObjectWrapper(object):
             return object.__str__(self)
 
     def __getattr__(self, name):
-        
         # First, try to look up an indexer adapter
         indexer = queryMultiAdapter((self.__object, self.__catalog,), IIndexer, name=name)
         if indexer is not None:
