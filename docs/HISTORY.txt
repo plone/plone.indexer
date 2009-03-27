@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0a2 - 2009-03-26
+1.0rc1 - 2009-03-26
 ------------------
 
 * Updated the interface to match the developments of similar functionality
