@@ -8,7 +8,7 @@ from zope.component import adapts, queryMultiAdapter
 from plone.indexer.interfaces import IIndexableObjectWrapper, IIndexableObject
 from plone.indexer.interfaces import IIndexer
 
-from Products.ZCatalog import IZCatalog
+from Products.ZCatalog.interfaces import IZCatalog
 from Products.CMFCore.utils import getToolByName
 
 class WrapperSpecification(ObjectSpecificationDescriptor):
