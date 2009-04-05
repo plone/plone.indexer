@@ -312,3 +312,13 @@ For example:
     False
     >>> INewsItem.providedBy(wrapper)
     True
+
+Unboxing
+========
+
+It is possible to obtain the wrapped object from the wrapper:
+
+    >>> wrapper = IndexableObjectWrapper(page, catalog)
+    >>> wrapper._getWrappedObject() is page
+    True
+

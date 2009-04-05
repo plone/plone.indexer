@@ -4,6 +4,10 @@ Changelog
 1.0rc2 - unreleased
 ------------------
 
+* Added _getWrappedObject() method to get hold of the underlying object.
+  Note that this means you can't have an index/metadata column with this name.
+  [optilude]
+
 * Corrected IZCatalog import location to point to the interfaces module.
   [hannosch]
 

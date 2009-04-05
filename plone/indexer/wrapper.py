@@ -42,7 +42,10 @@ class IndexableObjectWrapper(object):
         portal_workflow = getToolByName(catalog, 'portal_workflow', None)
         if portal_workflow is not None:
             self.__vars = portal_workflow.getCatalogVariablesFor(object)
-
+        
+    def _getWrappedObject(self):
+        return self.__object
+        
     def __str__(self):
         try:
             return self.__object.__str__()

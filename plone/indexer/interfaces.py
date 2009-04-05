@@ -43,3 +43,10 @@ class IDelegatingIndexableObjectWrapper(IIndexableObjectWrapper):
     indexed. The wrapper may either implement these directly (as methods
     taking no parameters) or implement __getattr__() appropriately.
     """
+    
+    def _getWrappedObject():
+        """Return the object that was wrapped.
+        
+        This has a leading underscore to reduce the risk of clashing with
+        an index or metadata column.
+        """
