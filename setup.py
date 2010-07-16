@@ -1,24 +1,26 @@
 from setuptools import setup, find_packages
-import os
 
-version = '1.0rc3'
+version = '1.0'
 
 setup(name='plone.indexer',
       version=version,
-      description="Hooks to facilitate managing custom index values in Zope 2/CMF applications",
-      long_description=open(os.path.join("plone", "indexer", "README.txt")).read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      description="Hooks to facilitate managing custom index values in "
+                  "Zope 2/CMF applications",
+      long_description=open("README.txt").read() + "\n" +
+                       open("CHANGES.txt").read(),
       classifiers=[
-        "Framework :: Plone",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+          "Environment :: Web Environment",
+          "Framework :: Plone",
+          "Framework :: Zope2",
+          "License :: OSI Approved :: GNU General Public License (GPL)",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
         ],
       keywords='plone cmf zope catalog index',
-      author='Martin Aspeli',
-      author_email='optilude@gmail.com',
+      author='Plone Foundation',
+      author_email='plone-developers@lists.sourceforge.net',
       url='http://pypi.python.org/pypi/plone.indexer',
-      license='LGPL',
+      license='GPL version 2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['plone'],
       include_package_data=True,
@@ -29,6 +31,4 @@ setup(name='plone.indexer',
           'zope.component',
           'Products.CMFCore',
       ],
-      entry_points="""
-      """,
       )
