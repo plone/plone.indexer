@@ -4,11 +4,14 @@ Changelog
 1.0 - unreleased
 ----------------
 
+- Fixed reSt markup in the changelog.
+  [hannosch]
+
 - Update license to GPL version 2 only.
   [hannosch]
 
 1.0rc2 - 2009-04-05
-------------------
+-------------------
 
 - Added _getWrappedObject() method to get hold of the underlying object.
   Note that this means you can't have an index/metadata column with this name.
@@ -18,7 +21,7 @@ Changelog
   [hannosch]
 
 1.0rc1 - 2009-03-26
-------------------
+-------------------
 
 - Updated the interface to match the developments of similar functionality
   on CMF trunk. This means that indexers are now multi-adapters on
