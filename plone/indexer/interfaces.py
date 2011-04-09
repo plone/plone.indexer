@@ -18,35 +18,37 @@ except ImportError:
         not already provide this interface.
         """
 
+
 class IIndexer(Interface):
     """A component that can provide the value for an catalog index.
-    
+
     Register a named adapter from an indexable object type (e.g. a content
     object) and the catalog to this interface.
-    
+
     The name of the adapter should be the same as the name of the indexable
     attribute in the catalog.
-    
+
     See also decorator.py, for a simpler indexer based on a function
     decorator.
     """
-    
+
     def __call__(self):
         """Return the value to index.
         """
 
+
 class IDelegatingIndexableObjectWrapper(IIndexableObjectWrapper):
-    """An adapter of a (object, catalog) where object is to be indexed in 
+    """An adapter of a (object, catalog) where object is to be indexed in
     the catalog and catalog is the portal_catalog or similar ZCatalog instance.
 
     The catalog will call getattr() on the wrapper for each attribute to be
     indexed. The wrapper may either implement these directly (as methods
     taking no parameters) or implement __getattr__() appropriately.
     """
-    
+
     def _getWrappedObject():
         """Return the object that was wrapped.
-        
+
         This has a leading underscore to reduce the risk of clashing with
         an index or metadata column.
         """
