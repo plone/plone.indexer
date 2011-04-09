@@ -1,8 +1,12 @@
 Changelog
 =========
 
+
 1.0.1 - unreleased
 ------------------
+
+- Add MANIFEST.in.
+  [WouterVH]
 
 
 1.0 - 2010-07-18
@@ -14,6 +18,7 @@ Changelog
 - Update license to GPL version 2 only.
   [hannosch]
 
+
 1.0rc2 - 2009-04-05
 -------------------
 
@@ -24,6 +29,7 @@ Changelog
 - Corrected IZCatalog import location to point to the interfaces module.
   [hannosch]
 
+
 1.0rc1 - 2009-03-26
 -------------------
 
@@ -32,6 +38,7 @@ Changelog
   (object, catalog), and the keyword arguments (including the implicit 
   'portal' parameter) are gone.
   [optilude]
+
 
 1.0a1 - 2009-03-05
 ------------------

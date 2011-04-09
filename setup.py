@@ -1,13 +1,27 @@
+import os
 from setuptools import setup, find_packages
 
+
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+
 version = '1.0.1'
+
+long_description = (
+    read('README.txt')
+    + '\n' +
+    read('plone', 'indexer', 'README.txt')
+    + '\n' +
+    read('CHANGES.txt')
+    + '\n'
+    )
 
 setup(name='plone.indexer',
       version=version,
       description="Hooks to facilitate managing custom index values in "
                   "Zope 2/CMF applications",
-      long_description=open("README.txt").read() + "\n" +
-                       open("CHANGES.txt").read(),
+      long_description=long_description,
       classifiers=[
           "Environment :: Web Environment",
           "Framework :: Plone",
