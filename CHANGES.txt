@@ -5,6 +5,11 @@ Changelog
 1.0.1 - unreleased
 ------------------
 
+- Relicense under modified BSD license; per Plone Foundation board
+  approval on 2012-05-31.
+  See: http://plone.org/foundation/materials/foundation-resolutions/plone-framework-components-relicensing-policy
+  [supton]
+
 - Add MANIFEST.in.
   [WouterVH]
 
