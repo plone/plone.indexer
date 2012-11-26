@@ -150,12 +150,13 @@ In CMF 2.2, there is an IIndexableObject marker interface defined in
 Products.CMFCore.interfaces. We have a compatibility alias in this package
 for use with CMF 2.1.
 
+    >>> from OFS.interfaces import IItem
     >>> from Products.ZCatalog.interfaces import IZCatalog
     >>> from plone.indexer.interfaces import IIndexableObject
     >>> from zope.component import queryMultiAdapter
 
     >>> class FauxCatalog(object):
-    ...     implements(IZCatalog)
+    ...     implements(IZCatalog, IItem)
     ...
     ...     def catalog_object(self, object, uid, idxs=[]):
     ...         """Pretend to index 'object' under the key 'uid'. We'll
@@ -227,6 +228,7 @@ so that it can be found by getToolByName. In real life, it would of course be
 acquirable as normal.
 
     >>> class FauxWorkflowTool(object):
+    ...     implements(IItem)
     ...     def getCatalogVariablesFor(self, object):
     ...         return dict(review_state='published', audience='Somebody')
     >>> catalog.portal_workflow = FauxWorkflowTool()
