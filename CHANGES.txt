@@ -5,7 +5,9 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Changed the @indexer decorator to maintain the information about the wrapped
+  function (__doc__, __module__, __name__, etc).
+  [dokai]
 
 
 1.0.1 (2012-12-14)
@@ -46,7 +48,7 @@ Changelog
 
 - Updated the interface to match the developments of similar functionality
   on CMF trunk. This means that indexers are now multi-adapters on
-  (object, catalog), and the keyword arguments (including the implicit 
+  (object, catalog), and the keyword arguments (including the implicit
   'portal' parameter) are gone.
   [optilude]
 
