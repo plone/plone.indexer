@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.2 (unreleased)
+1.0.2 (2013-01-13)
 ------------------
 
 - Changed the @indexer decorator to maintain the information about the wrapped
