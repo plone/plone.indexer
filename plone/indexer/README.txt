@@ -38,7 +38,7 @@ field for news items, in all uppercase. It should do nothing for pages.
 We could write indexers for all of these like this
 
     >>> from plone.indexer import indexer
-    
+
     >>> @indexer(IPage)
     ... def page_description(object):
     ...     return object.text[:10]
@@ -59,7 +59,7 @@ the index name. In ZCML, that may be::
     <adapter name="audience" factory=".indexers.newsitem_audience" />
 
 We can omit the 'for' attribute because we passed this to the @indexer
-decorator, and we can omit the 'provides' attribute because the thing 
+decorator, and we can omit the 'provides' attribute because the thing
 returned by the decorator is actually a class providing the required IIndexer
 interface.
 
@@ -80,11 +80,11 @@ When the @indexer decorator returns, it turns your function into an instance
 of type DelegatingIndexerFactory. This is an adapter factory that can create
 a DelegatingIndexer, which in turn will call your function when asked to
 perform indexing operations.
-   
+
 This means that you can't just call your function to test the indexer.
 Instead, you need to instantiate the adapter and then call the delegating
 indexer with the portal root as the first argument. For example:
- 
+
     >>> test_page = Page(text=u"My page with some text")
     >>> page_description(test_page)()
     u'My page wi'
@@ -113,11 +113,11 @@ indexers as more conventional adapters:
     ...     """
     ...     implements(IIndexer)
     ...     adapts(IPage, IZCatalog)
-    ...     
+    ...
     ...     def __init__(self, context, catalog):
     ...         self.context = context
     ...         self.catalog = catalog
-    ...         
+    ...
     ...     def __call__(self):
     ...         return len(self.context.text)
 
@@ -128,7 +128,7 @@ catalogs, there is an example later in this test.
 You'd register this with ZCML like so::
 
     <adapter factory=".indexers.LengthIndexer" name="length" />
-    
+
 Or in a test:
 
     >>> provideAdapter(LengthIndexer, name="length")
@@ -146,7 +146,7 @@ ZCatalog interface, only catalog_object(), and we'll stub out a few things.
 This really is for illustration purposes only, to show the intended usage
 pattern.
 
-In CMF 2.2, there is an IIndexableObject marker interface defined in 
+In CMF 2.2, there is an IIndexableObject marker interface defined in
 Products.CMFCore.interfaces. We have a compatibility alias in this package
 for use with CMF 2.1.
 
@@ -162,12 +162,12 @@ for use with CMF 2.1.
     ...         """Pretend to index 'object' under the key 'uid'. We'll
     ...         print the results of the indexing operation to the screen .
     ...         """
-    ...         
+    ...
     ...         if not IIndexableObject.providedBy(object):
     ...             wrapper = queryMultiAdapter((object, self,), IIndexableObject)
     ...             if wrapper is not None:
     ...                 object = wrapper
-    ...         
+    ...
     ...         # Perform the actual indexing of attributes in the idxs list
     ...         for idx in idxs:
     ...             try:
@@ -183,13 +183,13 @@ The important things here are:
     - We attempt to obtain an IIndexableObject for the object to be indexed.
       This is just a way to get hold of an implementation of this interface
       (we'll register one in a moment) and allow some coarse-grained overrides.
-      
-    - Cataloging involves looking up attributes on the indexable object 
+
+    - Cataloging involves looking up attributes on the indexable object
       wrapper matching the names of indexes (in the real ZCatalog, this is
       actually decoupled, but let's not get carried away). If they are
       callable, they should be called. This is just mimicking what ZCatalog's
       implementation does.
-      
+
 This package comes with an implementation of an IIndexableObject adapter that
 knows how to delegate to an IIndexer. Let's now register that as the default
 IIndexableObject wrapper adapter so that the code above will find it.
