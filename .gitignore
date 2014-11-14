@@ -1,0 +1,6 @@
+*.pyc
+*.pyo
+/plone.indexer.egg-info/
+/dist/
+
+
