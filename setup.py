@@ -44,5 +44,6 @@ setup(name='plone.indexer',
           'zope.interface',
           'zope.component',
           'Products.CMFCore',
+          'Products.ZCatalog',
       ],
       )
