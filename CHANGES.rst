@@ -5,7 +5,8 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add missing dependency on Products.ZCatalog.
+  [gforcada]
 
 
 1.0.2 (2013-01-13)
