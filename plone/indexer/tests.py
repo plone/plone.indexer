@@ -22,7 +22,7 @@ class TestWrapperUpdate(unittest.TestCase):
 def test_suite():
     return unittest.TestSuite([
         doctestunit.DocFileSuite(
-            'README.txt', package='plone.indexer',
+            'README.rst', package='plone.indexer',
             setUp=testing.setUp, tearDown=testing.tearDown),
         unittest.makeSuite(TestWrapperUpdate),
         ])

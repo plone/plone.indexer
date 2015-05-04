@@ -9,11 +9,11 @@ def read(*rnames):
 version = '1.0.3.dev0'
 
 long_description = (
-    read('README.txt')
+    read('README.rst')
     + '\n' +
-    read('plone', 'indexer', 'README.txt')
+    read('plone', 'indexer', 'README.rst')
     + '\n' +
-    read('CHANGES.txt')
+    read('CHANGES.rst')
     + '\n'
     )
 
