@@ -1,6 +1,6 @@
 import unittest
+import doctest
 
-from zope.testing import doctestunit
 from zope.component import testing
 
 
@@ -21,7 +21,7 @@ class TestWrapperUpdate(unittest.TestCase):
 
 def test_suite():
     return unittest.TestSuite([
-        doctestunit.DocFileSuite(
+        doctest.DocFileSuite(
             'README.rst', package='plone.indexer',
             setUp=testing.setUp, tearDown=testing.tearDown),
         unittest.makeSuite(TestWrapperUpdate),
