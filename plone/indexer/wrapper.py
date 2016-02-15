@@ -1,19 +1,16 @@
+from plone.indexer.interfaces import IIndexableObject
+from plone.indexer.interfaces import IIndexableObjectWrapper
+from plone.indexer.interfaces import IIndexer
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.interfaces import IZCatalog
+from zope.component import adapts
+from zope.component import queryMultiAdapter
 from zope.interface import implements
-from zope.interface import providedBy
 from zope.interface import Interface
+from zope.interface import providedBy
 from zope.interface.declarations import getObjectSpecification
 from zope.interface.declarations import ObjectSpecification
 from zope.interface.declarations import ObjectSpecificationDescriptor
-
-from zope.component import adapts
-from zope.component import queryMultiAdapter
-
-from plone.indexer.interfaces import IIndexableObjectWrapper
-from plone.indexer.interfaces import IIndexableObject
-from plone.indexer.interfaces import IIndexer
-
-from Products.ZCatalog.interfaces import IZCatalog
-from Products.CMFCore.utils import getToolByName
 
 
 class WrapperSpecification(ObjectSpecificationDescriptor):
@@ -60,7 +57,9 @@ class IndexableObjectWrapper(object):
 
     def __getattr__(self, name):
         # First, try to look up an indexer adapter
-        indexer = queryMultiAdapter((self.__object, self.__catalog), IIndexer, name=name)
+        indexer = queryMultiAdapter(
+            (self.__object, self.__catalog), IIndexer, name=name
+        )
         if indexer is not None:
             return indexer()
 

@@ -1,7 +1,8 @@
-from zope.interface import implements
-from zope.interface.declarations import Implements, implementedBy
-from plone.indexer.interfaces import IIndexer
 from functools import update_wrapper
+from plone.indexer.interfaces import IIndexer
+from zope.interface import implements
+from zope.interface.declarations import implementedBy
+from zope.interface.declarations import Implements
 
 
 class DelegatingIndexer(object):

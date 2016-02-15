@@ -1,7 +1,7 @@
-import unittest
-import doctest
-
 from zope.component import testing
+
+import doctest
+import unittest
 
 
 class TestWrapperUpdate(unittest.TestCase):
@@ -25,7 +25,7 @@ def test_suite():
             'README.rst', package='plone.indexer',
             setUp=testing.setUp, tearDown=testing.tearDown),
         unittest.makeSuite(TestWrapperUpdate),
-        ])
+    ])
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

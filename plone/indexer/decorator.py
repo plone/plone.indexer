@@ -1,9 +1,9 @@
 """This module defines a decorator that
 """
 
-from zope.component import adapter
 from plone.indexer.delegate import DelegatingIndexerFactory
 from Products.ZCatalog.interfaces import IZCatalog
+from zope.component import adapter
 
 
 class indexer(adapter):
