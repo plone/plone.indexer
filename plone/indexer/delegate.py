@@ -1,14 +1,14 @@
 from functools import update_wrapper
 from plone.indexer.interfaces import IIndexer
-from zope.interface import implements
+from zope.interface import implementer
 from zope.interface.declarations import implementedBy
 from zope.interface.declarations import Implements
 
 
+@implementer(IIndexer)
 class DelegatingIndexer(object):
     """An indexer that delegates to a given callable
     """
-    implements(IIndexer)
 
     def __init__(self, context, catalog, callable):
         self.context = context
