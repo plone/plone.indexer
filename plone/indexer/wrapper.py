@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.indexer.interfaces import IIndexableObject
 from plone.indexer.interfaces import IIndexableObjectWrapper
 from plone.indexer.interfaces import IIndexer

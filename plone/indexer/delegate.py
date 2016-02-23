@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from functools import update_wrapper
 from plone.indexer.interfaces import IIndexer
 from zope.interface import implementer

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from zope.interface import Interface
 
 # NOTE: CMF 2.2 provides standard interfaces for indexing. We provide

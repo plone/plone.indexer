@@ -1,27 +1,24 @@
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
-
-
-def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 
 version = '1.0.4.dev0'
+description = 'Hooks to facilitate managing custom index values in Zope 2/CMF applications'  # noqa
+long_description = ('\n\n'.join([
+    open('README.rst').read(),
+    open('CHANGES.rst').read(),
+    open(os.path.join("plone", "indexer", "README.rst")).read(),
 
-long_description = (
-    read('README.rst')
-    + '\n' +
-    read('plone', 'indexer', 'README.rst')
-    + '\n' +
-    read('CHANGES.rst')
-    + '\n'
-    )
+]))
+
 
 setup(
     name='plone.indexer',
     version=version,
-    description="Hooks to facilitate managing custom index values in "
-                "Zope 2/CMF applications",
+    description=description,
     long_description=long_description,
     classifiers=[
         "Environment :: Web Environment",
@@ -51,4 +48,4 @@ setup(
         'Products.CMFCore',
         'Products.ZCatalog',
     ],
-    )
+)

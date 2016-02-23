@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """This module defines a decorator that
 """
 
@@ -12,7 +13,7 @@ class indexer(adapter):
         >>> from plone.indexer.decorator import indexer
         >>> @indexer(IMyType)
         ... def some_attribute(object):
-        ...     return "some indexable value"
+        ...     return 'some indexable value'
 
     Note that the @indexer decorator is a superset of the @adapter decorator
     from zope.component.
@@ -22,7 +23,7 @@ class indexer(adapter):
         >>> from plone.indexer.decorator import indexer
         >>> @indexer(IMyType, IMyCatalog)
         ... def some_attribute(object):
-        ...     return "some indexable value"
+        ...     return 'some indexable value'
 
     The default is to register the indexer for all IZCatalog catalogs.
 
@@ -38,7 +39,10 @@ class indexer(adapter):
         if len(interfaces) == 1:
             interfaces += (IZCatalog, )
         elif len(interfaces) > 2:
-            raise ValueError(u"The @indexer decorator takes at most two interfaces as arguments")
+            raise ValueError(
+                u'The @indexer decorator takes at most two interfaces as '
+                u'arguments.'
+            )
         adapter.__init__(self, *interfaces)
 
     def __call__(self, callable):
