@@ -15,6 +15,9 @@ Fixes:
   module from stdlib.
   [thet]
 
+- Reformat according to the Plone styleguide.
+  [thet]
+
 
 1.0.3 (2015-05-05)
 ------------------

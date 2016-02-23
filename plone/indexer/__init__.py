@@ -1,1 +1,2 @@
-from plone.indexer.decorator import indexer
+# -*- coding: utf-8 -*-
+from plone.indexer.decorator import indexer  # noqa
