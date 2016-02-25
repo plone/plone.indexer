@@ -5,10 +5,6 @@ Changelog
 1.0.4 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Replace deprecated ``zope.testing.doctestunit`` import with ``doctest``
