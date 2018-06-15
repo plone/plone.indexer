@@ -2,6 +2,8 @@
 from zope.component import testing
 
 import doctest
+import re
+import six
 import unittest
 
 
@@ -20,11 +22,22 @@ class TestWrapperUpdate(unittest.TestCase):
         self.assertEqual(my_func.__name__, 'my_func')
 
 
+class Py23DocChecker(doctest.OutputChecker):
+    def check_output(self, want, got, optionflags):
+        if six.PY2:
+            got = re.sub("u'(.*?)'", "'\\1'", want)
+        return doctest.OutputChecker.check_output(self, want, got, optionflags)
+
+
 def test_suite():
     return unittest.TestSuite([
         doctest.DocFileSuite(
-            'README.rst', package='plone.indexer',
-            setUp=testing.setUp, tearDown=testing.tearDown),
+            'README.rst',
+            package='plone.indexer',
+            setUp=testing.setUp,
+            tearDown=testing.tearDown,
+            checker=Py23DocChecker(),
+            ),
         unittest.makeSuite(TestWrapperUpdate),
     ])
 

@@ -23,6 +23,9 @@ Fixes:
   because they get the acquisition-wrapped object.
   [jensens]
 
+- Fix tests to work in Python 3
+  [pbauer]
+
 
 1.0.4 (2016-02-25)
 ------------------

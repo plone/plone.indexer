@@ -80,7 +80,7 @@ For example::
 
     >>> test_page = Page(text=u"My page with some text")
     >>> page_description(test_page)()
-    u'My page wi'
+    'My page wi'
 
 This will suffice in most cases.
 Note that there is actually a second parameter, catalog, which defaults to None.
@@ -163,7 +163,7 @@ We have a compatibility alias in this package for use with CMF 2.1.
     ...                 indexed_value = getattr(object, idx)
     ...                 if callable(indexed_value):
     ...                     indexed_value = indexed_value()
-    ...                 print idx, "=", indexed_value
+    ...                 print(idx, "=", indexed_value)
     ...             except (AttributeError, TypeError,):
     ...                 pass
 
