@@ -41,7 +41,7 @@ class indexer(adapter):
         elif len(interfaces) > 2:
             raise ValueError(
                 u'The @indexer decorator takes at most two interfaces as '
-                u'arguments.'
+                u'arguments.',
             )
         adapter.__init__(self, *interfaces)
 
