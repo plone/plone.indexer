@@ -28,5 +28,6 @@ def test_suite():
         unittest.makeSuite(TestWrapperUpdate),
     ])
 
+
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

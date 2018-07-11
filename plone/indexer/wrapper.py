@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Acquisition import aq_base
 from plone.indexer.interfaces import IIndexableObject
 from plone.indexer.interfaces import IIndexableObjectWrapper
 from plone.indexer.interfaces import IIndexer
@@ -57,7 +58,8 @@ class IndexableObjectWrapper(object):
     def __getattr__(self, name):
         # First, try to look up an indexer adapter
         indexer = queryMultiAdapter(
-            (self.__object, self.__catalog), IIndexer, name=name
+            (self.__object, self.__catalog),
+            IIndexer, name=name,
         )
         if indexer is not None:
             return indexer()
@@ -66,6 +68,27 @@ class IndexableObjectWrapper(object):
         if name in self.__vars:
             return self.__vars[name]
 
-        # Finally see if the object provides the attribute directly. This
-        # is allowed to raise AttributeError.
-        return getattr(self.__object, name)
+        # first lets see if there is an attribute at all,
+        # here we may already raise an AttributeError, which is fine
+        value_or_callable = getattr(self.__object, name)
+        try:
+            # then lets see if the object provides the attribute directly,
+            # w/o acquisition.
+            getattr(aq_base(self.__object), name)
+        except AttributeError:
+            # it does not!
+            # PythonScripts are the only way to add indexers TTW.
+            # If there is a PythonScript acquired, thats fine:
+            if (
+                getattr(
+                    value_or_callable,
+                    'meta_type',
+                    None,
+                ) == 'Script (Python)'
+            ):
+                return value_or_callable
+            raise
+        # here we know it is a direct attribute.
+        # we return the attribute acquistion wrapped in order to enable
+        # callables to use acquisition.
+        return value_or_callable
