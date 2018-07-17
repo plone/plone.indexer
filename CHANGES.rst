@@ -18,7 +18,7 @@ Fixes:
 - fix https://github.com/plone/Products.CMFPlone/issues/2469:
   "Subobjects are indexing attributes of parent".
   Allow only direct attributes and acquired PythonScripts,
-  but not aqcquired attributes.
+  but not acquired attributes.
   Indexers and PythonScripts are able to handle this explicitly,
   because they get the acquisition-wrapped object.
   [jensens]
