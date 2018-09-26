@@ -5,14 +5,6 @@ Changelog
 1.0.5 (unreleased)
 ------------------
 
-Incompatibilities:
-
-- *add item here*
-
-New:
-
-- *add item here*
-
 Fixes:
 
 - fix https://github.com/plone/Products.CMFPlone/issues/2469:
