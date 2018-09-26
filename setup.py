@@ -5,7 +5,7 @@ from setuptools import setup
 import os
 
 
-version = '1.0.5'
+version = '1.0.6.dev0'
 description = 'Hooks to facilitate managing custom index values in Zope 2/CMF applications'  # noqa
 long_description = ('\n\n'.join([
     open('README.rst').read(),

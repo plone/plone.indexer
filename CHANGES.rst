@@ -2,6 +2,22 @@ Changelog
 =========
 
 
+1.0.6 (unreleased)
+------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
 1.0.5 (2018-09-26)
 ------------------
 
