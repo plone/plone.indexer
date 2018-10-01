@@ -38,7 +38,7 @@ setup(
     keywords='plone cmf zope catalog index',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.python.org/pypi/plone.indexer',
+    url='https://pypi.org/project/plone.indexer',
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['plone'],
