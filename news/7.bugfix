@@ -1,1 +1,0 @@
-Fixed: doctests on Python 2 were not correctly checked.  [maurits]
