@@ -34,6 +34,7 @@ class IndexableObjectWrapper:
     """A simple wrapper for indexable objects that will delegate to IIndexer
     adapters as appropriate.
     """
+
     __providedBy__ = WrapperSpecification()
 
     def __init__(self, object, catalog):
@@ -41,7 +42,7 @@ class IndexableObjectWrapper:
         self.__catalog = catalog
         self.__vars = {}
 
-        portal_workflow = getToolByName(catalog, 'portal_workflow', None)
+        portal_workflow = getToolByName(catalog, "portal_workflow", None)
         if portal_workflow is not None:
             self.__vars = portal_workflow.getCatalogVariablesFor(object)
 
@@ -58,7 +59,8 @@ class IndexableObjectWrapper:
         # First, try to look up an indexer adapter
         indexer = queryMultiAdapter(
             (self.__object, self.__catalog),
-            IIndexer, name=name,
+            IIndexer,
+            name=name,
         )
         if indexer is not None:
             return indexer()
@@ -78,13 +80,8 @@ class IndexableObjectWrapper:
             # it does not!
             # PythonScripts are the only way to add indexers TTW.
             # If there is a PythonScript acquired, thats fine:
-            if (
-                getattr(
-                    value_or_callable,
-                    'meta_type',
-                    None,
-                ) == 'Script (Python)'
-            ):
+            meta_type = getattr(value_or_callable, "meta_type", None)
+            if meta_type == "Script (Python)":
                 return value_or_callable
             raise
         # here we know it is a direct attribute.

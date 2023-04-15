@@ -4,18 +4,19 @@ from setuptools import setup
 import os
 
 
-version = '1.0.8.dev0'
-description = 'Hooks to facilitate managing custom index values in Zope 2/CMF applications'  # noqa
-long_description = ('\n\n'.join([
-    open('README.rst').read(),
-    open('CHANGES.rst').read(),
-    open(os.path.join("plone", "indexer", "README.rst")).read(),
-
-]))
+version = "1.0.8.dev0"
+description = "Hooks to facilitate managing custom index values in Zope 2/CMF applications"  # noqa
+long_description = "\n\n".join(
+    [
+        open("README.rst").read(),
+        open("CHANGES.rst").read(),
+        open(os.path.join("plone", "indexer", "README.rst")).read(),
+    ]
+)
 
 
 setup(
-    name='plone.indexer',
+    name="plone.indexer",
     version=version,
     description=description,
     long_description=long_description,
@@ -38,20 +39,20 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords='plone cmf zope catalog index',
-    author='Plone Foundation',
-    author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.org/project/plone.indexer',
-    license='BSD',
+    keywords="plone cmf zope catalog index",
+    author="Plone Foundation",
+    author_email="plone-developers@lists.sourceforge.net",
+    url="https://pypi.org/project/plone.indexer",
+    license="BSD",
     packages=find_packages(),
-    namespace_packages=['plone'],
+    namespace_packages=["plone"],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'setuptools',
-        'zope.interface',
-        'zope.component',
-        'Products.CMFCore',
-        'Products.ZCatalog',
+        "setuptools",
+        "zope.interface",
+        "zope.component",
+        "Products.CMFCore",
+        "Products.ZCatalog",
     ],
 )

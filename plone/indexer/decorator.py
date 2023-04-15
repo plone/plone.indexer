@@ -36,11 +36,10 @@ class indexer(adapter):
 
     def __init__(self, *interfaces):
         if len(interfaces) == 1:
-            interfaces += (IZCatalog, )
+            interfaces += (IZCatalog,)
         elif len(interfaces) > 2:
             raise ValueError(
-                'The @indexer decorator takes at most two interfaces as '
-                'arguments.',
+                "The @indexer decorator takes at most two interfaces as arguments.",
             )
         adapter.__init__(self, *interfaces)
 

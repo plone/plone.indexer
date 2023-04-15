@@ -7,7 +7,6 @@ import unittest
 
 
 class TestWrapperUpdate(unittest.TestCase):
-
     def test_wrapper_update(self):
         from plone.indexer import indexer
         from zope.interface import Interface
@@ -16,9 +15,9 @@ class TestWrapperUpdate(unittest.TestCase):
         def my_func(obj):
             """My custom docstring."""
 
-        self.assertEqual(my_func.__doc__, 'My custom docstring.')
-        self.assertEqual(my_func.__module__, 'plone.indexer.tests')
-        self.assertEqual(my_func.__name__, 'my_func')
+        self.assertEqual(my_func.__doc__, "My custom docstring.")
+        self.assertEqual(my_func.__module__, "plone.indexer.tests")
+        self.assertEqual(my_func.__name__, "my_func")
 
 
 class Py23DocChecker(doctest.OutputChecker):
@@ -29,17 +28,19 @@ class Py23DocChecker(doctest.OutputChecker):
 
 
 def test_suite():
-    return unittest.TestSuite([
-        doctest.DocFileSuite(
-            'README.rst',
-            package='plone.indexer',
-            setUp=testing.setUp,
-            tearDown=testing.tearDown,
-            checker=Py23DocChecker(),
+    return unittest.TestSuite(
+        [
+            doctest.DocFileSuite(
+                "README.rst",
+                package="plone.indexer",
+                setUp=testing.setUp,
+                tearDown=testing.tearDown,
+                checker=Py23DocChecker(),
             ),
-        unittest.defaultTestLoader.loadTestsFromTestCase(TestWrapperUpdate),
-    ])
+            unittest.defaultTestLoader.loadTestsFromTestCase(TestWrapperUpdate),
+        ]
+    )
 
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+if __name__ == "__main__":
+    unittest.main(defaultTest="test_suite")

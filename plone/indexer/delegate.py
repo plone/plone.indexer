@@ -7,8 +7,7 @@ from zope.interface.declarations import Implements
 
 @implementer(IIndexer)
 class DelegatingIndexer:
-    """An indexer that delegates to a given callable
-    """
+    """An indexer that delegates to a given callable"""
 
     def __init__(self, context, catalog, callable):
         self.context = context
