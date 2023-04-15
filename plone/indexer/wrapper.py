@@ -79,7 +79,7 @@ class IndexableObjectWrapper:
         except AttributeError:
             # it does not!
             # PythonScripts are the only way to add indexers TTW.
-            # If there is a PythonScript acquired, thats fine:
+            # If there is a PythonScript acquired, that's fine:
             meta_type = getattr(value_or_callable, "meta_type", None)
             if meta_type == "Script (Python)":
                 return value_or_callable
