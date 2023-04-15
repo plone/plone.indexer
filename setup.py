@@ -47,9 +47,6 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "setuptools",
-        "zope.interface",
-        "zope.component",
         "Products.CMFCore",
-        "Products.ZCatalog",
     ],
 )
