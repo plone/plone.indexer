@@ -9,7 +9,10 @@ from zope.component import adapter
 class indexer(adapter):
     """The @indexer decorator can be used like this:
 
+        >>> from zope.interface import Interface
         >>> from plone.indexer.decorator import indexer
+        >>> class IMyType(Interface): ...
+        >>> class IMyCatalog(Interface): ...
         >>> @indexer(IMyType)
         ... def some_attribute(object):
         ...     return 'some indexable value'
@@ -21,7 +24,7 @@ class indexer(adapter):
 
         >>> from plone.indexer.decorator import indexer
         >>> @indexer(IMyType, IMyCatalog)
-        ... def some_attribute(object):
+        ... def another_attribute(object):
         ...     return 'some indexable value'
 
     The default is to register the indexer for all IZCatalog catalogs.
