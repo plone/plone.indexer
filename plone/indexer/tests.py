@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.component import testing
 
 import doctest
@@ -38,7 +37,7 @@ def test_suite():
             tearDown=testing.tearDown,
             checker=Py23DocChecker(),
             ),
-        unittest.makeSuite(TestWrapperUpdate),
+        unittest.defaultTestLoader.loadTestsFromTestCase(TestWrapperUpdate),
     ])
 
 

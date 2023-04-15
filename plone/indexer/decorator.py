@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """This module defines a decorator that
 """
 
@@ -40,8 +39,8 @@ class indexer(adapter):
             interfaces += (IZCatalog, )
         elif len(interfaces) > 2:
             raise ValueError(
-                u'The @indexer decorator takes at most two interfaces as '
-                u'arguments.',
+                'The @indexer decorator takes at most two interfaces as '
+                'arguments.',
             )
         adapter.__init__(self, *interfaces)
 

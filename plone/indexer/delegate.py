@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from functools import update_wrapper
 from plone.indexer.interfaces import IIndexer
 from zope.interface import implementer
@@ -7,7 +6,7 @@ from zope.interface.declarations import Implements
 
 
 @implementer(IIndexer)
-class DelegatingIndexer(object):
+class DelegatingIndexer:
     """An indexer that delegates to a given callable
     """
 
@@ -20,7 +19,7 @@ class DelegatingIndexer(object):
         return self.callable(self.context)
 
 
-class DelegatingIndexerFactory(object):
+class DelegatingIndexerFactory:
     """An adapter factory for an IIndexer that works by calling a
     DelegatingIndexer.
     """

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from plone.indexer.interfaces import IIndexableObject
 from plone.indexer.interfaces import IIndexableObjectWrapper
@@ -31,7 +30,7 @@ class WrapperSpecification(ObjectSpecificationDescriptor):
 
 @implementer(IIndexableObject, IIndexableObjectWrapper)
 @adapter(Interface, IZCatalog)
-class IndexableObjectWrapper(object):
+class IndexableObjectWrapper:
     """A simple wrapper for indexable objects that will delegate to IIndexer
     adapters as appropriate.
     """
