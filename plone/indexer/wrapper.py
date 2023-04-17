@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from plone.indexer.interfaces import IIndexableObject
 from plone.indexer.interfaces import IIndexableObjectWrapper
@@ -31,10 +30,11 @@ class WrapperSpecification(ObjectSpecificationDescriptor):
 
 @implementer(IIndexableObject, IIndexableObjectWrapper)
 @adapter(Interface, IZCatalog)
-class IndexableObjectWrapper(object):
+class IndexableObjectWrapper:
     """A simple wrapper for indexable objects that will delegate to IIndexer
     adapters as appropriate.
     """
+
     __providedBy__ = WrapperSpecification()
 
     def __init__(self, object, catalog):
@@ -42,7 +42,7 @@ class IndexableObjectWrapper(object):
         self.__catalog = catalog
         self.__vars = {}
 
-        portal_workflow = getToolByName(catalog, 'portal_workflow', None)
+        portal_workflow = getToolByName(catalog, "portal_workflow", None)
         if portal_workflow is not None:
             self.__vars = portal_workflow.getCatalogVariablesFor(object)
 
@@ -59,7 +59,8 @@ class IndexableObjectWrapper(object):
         # First, try to look up an indexer adapter
         indexer = queryMultiAdapter(
             (self.__object, self.__catalog),
-            IIndexer, name=name,
+            IIndexer,
+            name=name,
         )
         if indexer is not None:
             return indexer()
@@ -78,14 +79,9 @@ class IndexableObjectWrapper(object):
         except AttributeError:
             # it does not!
             # PythonScripts are the only way to add indexers TTW.
-            # If there is a PythonScript acquired, thats fine:
-            if (
-                getattr(
-                    value_or_callable,
-                    'meta_type',
-                    None,
-                ) == 'Script (Python)'
-            ):
+            # If there is a PythonScript acquired, that's fine:
+            meta_type = getattr(value_or_callable, "meta_type", None)
+            if meta_type == "Script (Python)":
                 return value_or_callable
             raise
         # here we know it is a direct attribute.

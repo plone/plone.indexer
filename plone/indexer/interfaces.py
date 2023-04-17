@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.interface import Interface
 
 
@@ -8,11 +7,15 @@ from zope.interface import Interface
 try:
     from Products.CMFCore.interfaces import IIndexableObjectWrapper
 except ImportError:
+
     class IIndexableObjectWrapper(Interface):
         pass
+
+
 try:
     from Products.CMFCore.interfaces import IIndexableObject
 except ImportError:
+
     class IIndexableObject(Interface):
         """An object being indexed in the catalog. The indexable object
         wrapper will be looked up as a multi-adapter of (object, catalog)
@@ -35,8 +38,7 @@ class IIndexer(Interface):
     """
 
     def __call__(self):
-        """Return the value to index.
-        """
+        """Return the value to index."""
 
 
 class IDelegatingIndexableObjectWrapper(IIndexableObjectWrapper):
