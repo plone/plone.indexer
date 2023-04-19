@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = "2.0.0.dev0"
+version = "2.0.0"
 description = "Hooks to facilitate managing custom index values in Zope 2/CMF applications"  # noqa
 long_description = "\n\n".join(
     [
