@@ -48,5 +48,6 @@ setup(
     install_requires=[
         "setuptools",
         "Products.CMFCore",
+        "Zope",
     ],
 )
