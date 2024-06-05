@@ -85,6 +85,6 @@ class IndexableObjectWrapper:
                 return value_or_callable
             raise
         # here we know it is a direct attribute.
-        # we return the attribute acquistion wrapped in order to enable
+        # we return the attribute acquisition wrapped in order to enable
         # callables to use acquisition.
         return value_or_callable
