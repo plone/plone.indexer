@@ -1,5 +1,4 @@
-"""This module defines a decorator that
-"""
+"""This module defines a decorator that"""
 
 from plone.indexer.delegate import DelegatingIndexerFactory
 from Products.ZCatalog.interfaces import IZCatalog
