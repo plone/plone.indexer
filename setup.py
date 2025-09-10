@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "2.0.2"
+version = "2.0.3.dev0"
 
 description = "Hooks to facilitate managing custom index values in Zope 2/CMF applications"  # noqa
 long_description = (
