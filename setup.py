@@ -1,9 +1,8 @@
 from pathlib import Path
-from setuptools import find_packages
 from setuptools import setup
 
 
-version = "2.0.3.dev0"
+version = "3.0.0.dev0"
 
 description = "Hooks to facilitate managing custom index values in Zope 2/CMF applications"  # noqa
 long_description = (
@@ -21,14 +20,12 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Core",
         "Framework :: Zope :: 5",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
@@ -37,14 +34,10 @@ setup(
     author_email="plone-developers@lists.sourceforge.net",
     url="https://pypi.org/project/plone.indexer",
     license="BSD",
-    packages=find_packages("src"),
-    namespace_packages=["plone"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=[
-        "setuptools",
         "Products.CMFCore",
         "Zope",
     ],
