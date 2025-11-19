@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup
 
 
-version = "3.0.0.dev0"
+version = "3.0.0a1.dev0"
 
 description = "Hooks to facilitate managing custom index values in Zope 2/CMF applications"  # noqa
 long_description = (
